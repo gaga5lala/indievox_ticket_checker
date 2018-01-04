@@ -19,7 +19,7 @@ doc = Nokogiri::HTML(open(base_url + location))
 
 articles = doc.css('.r-list-container .r-ent')
 articles.each do |article|
-  list.first.css('.title a').first.attributes['href'].value
+  article.first.css('.title a').first.attributes['href'].value
 
 end
 
