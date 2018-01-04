@@ -15,5 +15,20 @@ url = 'https://www.ptt.cc/bbs/Stock/index3920.html'
 
 doc = Nokogiri::HTML(open(url))
 
-
 doc.css('r-list-container').css('ent')
+
+posts.each do |post|
+  if match_condition
+    Notifier::Telegram.new.create(message)
+  end
+end
+
+# next page
+# action-bar-container > action-bar > btn-group btn-group-paging [1] "上頁"
+
+private
+
+def match_condition(post)
+  subscribed_authors.include? post.author || subscribed_titles.include? post.title
+end
+
