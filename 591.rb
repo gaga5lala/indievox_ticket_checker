@@ -11,9 +11,11 @@ CONDITIONS = {
     'is_new_list': '1',
     'type': '1', # 類型???
     'kind': '1', # 類型
+    'region': '1', # 位置：台北市
+    'section': '4,3,5,7,1', # 區域：中山大安信義中正松山
     'searchtype': '1',
     'regionid': '1',
-    'rentprice': '0,27500', # 租金
+    'rentprice': '0,36000', # 租金
     'patternMore': '3,4', # 格局
     'option': 'cold', # 提供設備
     'other': 'cook', # 其他條件
@@ -50,8 +52,11 @@ houses.each do |house|
     標題: house["address_img_title"],
     網址: DETAIL_URL.gsub("{house_id}",house["id"].to_s),
     價錢: house["price"] + house["unit"],
+    區域: house["region_name"] + house["section_name"],
     地址: house["fulladdress"],
-    樓層: house["floor"],
+    格局: house["layout"],
+    樓層: house["floorInfo"],
+    房東提供: house["condition"],
     更新時間: house["updatetime"]
   }
 
