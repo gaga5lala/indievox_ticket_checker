@@ -12,3 +12,5 @@ gem "dotenv"
 
 gem "awesome_print"
 gem "rerun"
+
+gem "rest-client"

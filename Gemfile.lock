@@ -10,6 +10,8 @@ GEM
       descendants_tracker (~> 0.0.1)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
+    domain_name (0.5.20170404)
+      unf (>= 0.0.5, < 1.0.0)
     dotenv (2.2.1)
     equalizer (0.0.11)
     et-orbi (1.0.8)
@@ -17,14 +19,20 @@ GEM
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.23)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
     ice_nine (0.11.2)
     inflecto (0.0.2)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     mini_portile2 (2.3.0)
     multipart-post (2.0.0)
+    netrc (0.11.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     rb-fsevent (0.10.2)
@@ -32,6 +40,10 @@ GEM
       ffi (>= 0.5.0, < 2)
     rerun (0.13.0)
       listen (~> 3.0)
+    rest-client (2.0.2)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     ruby_dep (1.5.0)
     rufus-scheduler (3.4.2)
       et-orbi (~> 1.0)
@@ -42,6 +54,9 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.5)
     virtus (1.0.5)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
@@ -56,6 +71,7 @@ DEPENDENCIES
   dotenv
   nokogiri
   rerun
+  rest-client
   rufus-scheduler
   telegram-bot-ruby
 
