@@ -11,3 +11,4 @@ gem "rufus-scheduler"
 gem "dotenv"
 
 gem "awesome_print"
+gem "rerun"
