@@ -1,9 +1,9 @@
+# TODO
+# 1. health check
 require 'rubygems'
-require 'nokogiri'
-require 'open-uri'
-require_relative './notifier/telegram.rb'
 require 'rest-client'
 require 'json'
+require_relative './notifier/telegram.rb'
 
 # Options reference
 # https://github.com/neighborhood999/fiveN1-rent-scraper#urljumpip-code-list
@@ -36,16 +36,15 @@ response = RestClient.get(
 ))
 
 result = JSON.parse(response)
-houses = result["data"]["data"]# ["data"][0]
 
-Notifier::Telegram.create(
-  {
-    搜尋時間: Time.now,
-    總件數: result["records"]
-  }
-)
+houses = result["data"]["data"]
 
-houses[0..1].each do |house|
+newest_house_updated_at = File.read("newest_house_updated_at").to_i
+
+count = 0
+houses.each do |house|
+  next if house["updatetime"] <= newest_house_updated_at
+
   message = {
     封面圖: house["cover"],
     標題: house["address_img_title"],
@@ -53,7 +52,21 @@ houses[0..1].each do |house|
     價錢: house["price"] + house["unit"],
     地址: house["fulladdress"],
     樓層: house["floor"],
+    更新時間: house["updatetime"]
   }
 
   Notifier::Telegram.create(message)
+
+  count += 1
+end
+
+if count > 0
+  Notifier::Telegram.create(
+    {
+      符合條件筆數: count,
+      搜尋時間: Time.now,
+    }
+  )
+  newest_house_updated_at = houses[0]["updatetime"]
+  File.write('newest_house_updated_at', newest_house_updated_at)
 end
