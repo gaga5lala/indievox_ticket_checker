@@ -55,9 +55,10 @@ houses.each do |house|
     區域: house["region_name"] + house["section_name"],
     地址: house["fulladdress"],
     格局: house["layout"],
+    坪數: house["area"],
     樓層: house["floorInfo"],
     房東提供: house["condition"],
-    更新時間: house["updatetime"]
+    更新時間: Time.at(house["updatetime"]).to_datetime.to_s
   }
 
   Notifier::Telegram.create(message)
