@@ -21,8 +21,11 @@ CONDITIONS = {
     'other': 'cook', # 其他條件
     'hasimg': '1', # 有房屋圖片
     'not_cover': '1', # 排除頂樓加蓋
-    'order': "posttime",
-    'ordertype': "desc"
+    'order': 'refreshtime',
+    'orderType': 'undefined'
+    #'order': "posttime",
+    #'order': "posttime",
+    #'ordertype': "desc"
 }
 
 DETAIL_URL = "https://rent.591.com.tw/rent-detail-{house_id}.html"
@@ -30,7 +33,10 @@ DETAIL_URL = "https://rent.591.com.tw/rent-detail-{house_id}.html"
 url = ENV["591_SEARCH_URL"]
 raise ArgumentError, "591_SEARCH_URL is missing." if url.nil?
 
-RestClient.log = 'stdout'
+logger = Logger.new('./591.log')
+logger.level = Logger::DEBUG
+logger << "Execute at: #{Time.now.to_s}\n"
+RestClient.log = logger
 
 response = RestClient.get(
   url,
@@ -45,7 +51,7 @@ newest_house_updated_at = File.read("newest_house_updated_at").to_i
 
 count = 0
 houses.each do |house|
-  next if house["updatetime"] <= newest_house_updated_at
+  next if house["refreshtime"] <= newest_house_updated_at
 
   message = {
     封面圖: house["cover"],
@@ -58,7 +64,7 @@ houses.each do |house|
     坪數: house["area"],
     樓層: house["floorInfo"],
     房東提供: house["condition"],
-    更新時間: Time.at(house["updatetime"]).to_datetime.to_s
+    默認更新時間: Time.at(house["refreshtime"]).to_datetime.to_s
   }
 
   Notifier::Telegram.create(message)
@@ -73,6 +79,6 @@ if count > 0
       搜尋時間: Time.now,
     }
   )
-  newest_house_updated_at = houses[0]["updatetime"]
+  newest_house_updated_at = houses[0]["refreshtime"]
   File.write('newest_house_updated_at', newest_house_updated_at)
 end
