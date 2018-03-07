@@ -54,11 +54,11 @@ houses.each do |house|
   next if house["refreshtime"] <= newest_house_updated_at
 
   message = {
-    封面圖: house["cover"],
     標題: house["address_img_title"],
-    網址: DETAIL_URL.gsub("{house_id}",house["id"].to_s),
     價錢: house["price"] + house["unit"],
     區域: house["region_name"] + house["section_name"],
+    封面圖: house["cover"],
+    網址: DETAIL_URL.gsub("{house_id}",house["id"].to_s),
     地址: house["fulladdress"],
     格局: house["layout"],
     坪數: house["area"],
