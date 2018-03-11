@@ -3,29 +3,9 @@
 require 'rubygems'
 require 'rest-client'
 require 'json'
+require 'yaml'
 require_relative './notifier/telegram.rb'
-
-# Options reference
-# https://github.com/neighborhood999/fiveN1-rent-scraper#urljumpip-code-list
-CONDITIONS = {
-    'is_new_list': '1',
-    'type': '1', # 類型???
-    'kind': '1', # 類型
-    'region': '1', # 位置：台北市
-    'section': '4,3,5,7,1', # 區域：中山大安信義中正松山
-    'searchtype': '1', # 依鄉鎮選擇
-    'regionid': '1', # 區域：台北市
-    'rentprice': '0,36000', # 租金
-    'patternMore': '3,4', # 格局
-    'option': 'cold', # 提供設備
-    'other': 'cook', # 其他條件
-    'hasimg': '1', # 有房屋圖片
-    'not_cover': '1', # 排除頂樓加蓋
-    'order': 'refreshtime', # 默認更新時間排序
-    'orderType': 'undefined'
-}
-
-DETAIL_URL = "https://rent.591.com.tw/rent-detail-{house_id}.html"
+CONFIG = YAML::load_file(File.join(__dir__, 'config', '591.yml'))
 
 url = ENV["591_SEARCH_URL"]
 raise ArgumentError, "591_SEARCH_URL is missing." if url.nil?
@@ -37,7 +17,7 @@ RestClient.log = logger
 
 response = RestClient.get(
   url,
-  {params: CONDITIONS}.merge({cookies: {urlJumpIp: "1"}}
+  {params: CONFIG["CONDITIONS"]}.merge({cookies: {urlJumpIp: "1"}}
 ))
 
 result = JSON.parse(response)
@@ -55,7 +35,7 @@ houses.each do |house|
     價錢: house["price"] + house["unit"],
     區域: house["region_name"] + house["section_name"],
     封面圖: house["cover"],
-    網址: DETAIL_URL.gsub("{house_id}",house["id"].to_s),
+    網址: CONFIG["DETAIL_URL"].gsub("{house_id}",house["id"].to_s),
     地址: house["fulladdress"],
     格局: house["layout"],
     坪數: house["area"],
